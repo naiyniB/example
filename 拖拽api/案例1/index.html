@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Drag and Drop Demo</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+      }
+      .container {
+        display: flex;
+        justify-content: space-around;
+        margin-top: 50px;
+      }
+      .draggable {
+        width: 100px;
+        height: 100px;
+        background-color: skyblue;
+        border: 2px solid #ccc;
+        margin: 10px;
+        text-align: center;
+        line-height: 100px;
+        cursor: move;
+      }
+      .drop-zone {
+        width: 200px;
+        height: 200px;
+        border: 2px dashed #aaa;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      .drag-over {
+        background-color: rgba(0, 255, 0, 0.2);
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Drag and Drop Demo</h1>
+    <div class="container">
+      <div id="drag1" class="draggable" draggable="true">Box 1</div>
+      <div id="drag2" class="draggable" draggable="true">Box 2</div>
+      <div id="drag3" class="draggable" draggable="true">Box 3</div>
+    </div>
+
+    <div class="container">
+      <div id="dropZone" class="drop-zone">Drop Here</div>
+    </div>
+
+    <script src="app.js"></script>
+  </body>
+</html>

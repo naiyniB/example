@@ -1,0 +1,18 @@
+<input type="file" id="fileInput" />
+<img id="image" alt="Uploaded Image" />
+
+<script>
+  document
+    .getElementById("fileInput")
+    .addEventListener("change", function (event) {
+      const file = event.target.files[0]; // 获取上传的文件
+      if (file) {
+        // 创建 Blob URL
+        const objectURL = URL.createObjectURL(file);
+        console.log(objectURL);
+
+        // 将 Blob URL 设置为 img 标签的 src 属性
+        document.getElementById("image").src = objectURL;
+      }
+    });
+</script>

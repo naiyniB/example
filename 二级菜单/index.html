@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="zh">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>二级菜单下拉框</title>
+    <style>
+      /* 样式设置 */
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f4f4f4;
+      }
+
+      /* 一级菜单样式 */
+      ul {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+        background-color: #333;
+      }
+
+      li {
+        position: relative;
+        display: inline-block;
+      }
+
+      a {
+        display: block;
+        padding: 10px 20px;
+        color: white;
+        text-decoration: none;
+      }
+
+      a:hover {
+        background-color: #575757;
+      }
+
+      /* 二级菜单样式 */
+      ul ul {
+        display: none;
+        position: absolute;
+        top: 0;
+        left: 100%;
+        background-color: #333;
+        min-width: 180px;
+      }
+
+      li:hover > ul {
+        display: block;
+      }
+
+      ul ul li {
+        width: 100%;
+      }
+    </style>
+  </head>
+  <body>
+    <ul>
+      <li><a href="#">菜单 1</a></li>
+      <li>
+        <a href="#">菜单 2</a>
+        <ul>
+          <li><a href="#">子菜单 1</a></li>
+          <li><a href="#">子菜单 2</a></li>
+          <li><a href="#">子菜单 3</a></li>
+        </ul>
+      </li>
+      <li><a href="#">菜单 3</a></li>
+    </ul>
+  </body>
+</html>

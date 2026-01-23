@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="zh">
+  <head>
+    <meta charset="UTF-8" />
+    <title>SVG Mask Text Demo</title>
+  </head>
+  <body style="background: #111; padding: 40px">
+    <svg width="600" height="120">
+      <!-- 底层文字 -->
+      <text x="20" y="80" font-size="64" font-weight="700" fill="#444">
+        HELLO SVG
+      </text>
+
+      <!-- mask 定义 -->
+      <mask id="text-mask">
+        <!-- 黑色 = 不显示，白色 = 显示 -->
+        <rect x="0" y="0" width="600" height="120" fill="white" />
+
+        <!-- 使用 circle 来从中心扩散 -->
+        <circle cx="300" cy="60" r="100" fill="black">
+          <!-- 核心：circle 动画 -->
+        </circle>
+      </mask>
+
+      <!-- 上层文字（被 mask 裁剪） -->
+      <text
+        x="20"
+        y="80"
+        font-size="64"
+        font-weight="700"
+        fill="#4ade80"
+        mask="url(#text-mask)"
+      >
+        HELLO SVG
+      </text>
+    </svg>
+  </body>
+</html>

@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>透明玻璃效果</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      .clear-glass {
+        background: rgba(255, 255, 255, 0.15);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+          0 2px 4px -1px rgba(0, 0, 0, 0.06),
+          inset 0 1px 0 rgba(255, 255, 255, 0.2);
+      }
+
+      .frosted-glass {
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        position: relative;
+        overflow: hidden;
+      }
+
+      .frosted-glass::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(
+          135deg,
+          rgba(255, 255, 255, 0.1) 0%,
+          rgba(255, 255, 255, 0.05) 50%,
+          rgba(255, 255, 255, 0.1) 100%
+        );
+        pointer-events: none;
+      }
+
+      .reflective-glass {
+        background: linear-gradient(
+          135deg,
+          rgba(255, 255, 255, 0.1) 0%,
+          rgba(255, 255, 255, 0.05) 50%,
+          rgba(255, 255, 255, 0.15) 100%
+        );
+        border: 1px solid rgba(255, 255, 255, 0.25);
+        position: relative;
+      }
+
+      .reflective-glass::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 1px;
+        background: linear-gradient(
+          90deg,
+          transparent 0%,
+          rgba(255, 255, 255, 0.4) 50%,
+          transparent 100%
+        );
+      }
+
+      .tinted-glass {
+        background: rgba(74, 144, 226, 0.15);
+        border: 1px solid rgba(74, 144, 226, 0.3);
+        backdrop-filter: none;
+      }
+
+      .textured-glass {
+        background: radial-gradient(
+            circle at 20% 80%,
+            rgba(255, 255, 255, 0.1) 0%,
+            transparent 50%
+          ),
+          radial-gradient(
+            circle at 80% 20%,
+            rgba(255, 255, 255, 0.1) 0%,
+            transparent 50%
+          ),
+          rgba(255, 255, 255, 0.08);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        position: relative;
+      }
+    </style>
+  </head>
+  <body
+    class="min-h-screen bg-gradient-to-br from-blue-900 via-purple-900 to-indigo-900 flex items-center justify-center p-6"
+  >
+    <div class="max-w-6xl w-full">
+      <h1 class="text-4xl font-bold text-white text-center mb-4">
+        多种玻璃效果展示
+      </h1>
+      <p class="text-white/70 text-center mb-12">无背景模糊的纯玻璃质感效果</p>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- 透明玻璃 -->
+        <div class="clear-glass rounded-2xl p-6 text-white">
+          <h2 class="text-xl font-semibold mb-3">透明玻璃</h2>
+          <p class="text-white/80 mb-4">
+            清晰的透明效果，无模糊处理，保持背景完全可见。
+          </p>
+          <div class="text-sm bg-black/20 rounded-lg p-3">
+            <code>background: rgba(255,255,255,0.15)</code>
+          </div>
+        </div>
+
+        <!-- 磨砂玻璃 -->
+        <div class="frosted-glass rounded-2xl p-6 text-white">
+          <h2 class="text-xl font-semibold mb-3">磨砂玻璃</h2>
+          <p class="text-white/80 mb-4">
+            细微的纹理效果，类似磨砂玻璃的表面质感。
+          </p>
+          <div class="text-sm bg-black/20 rounded-lg p-3">
+            <code>渐变叠加 + 细微纹理</code>
+          </div>
+        </div>
+
+        <!-- 反光玻璃 -->
+        <div class="reflective-glass rounded-2xl p-6 text-white">
+          <h2 class="text-xl font-semibold mb-3">反光玻璃</h2>
+          <p class="text-white/80 mb-4">带有顶部高光反射，增强玻璃的光泽感。</p>
+          <div class="text-sm bg-black/20 rounded-lg p-3">
+            <code>::after 伪元素高光</code>
+          </div>
+        </div>
+
+        <!-- 有色玻璃 -->
+        <div class="tinted-glass rounded-2xl p-6 text-white">
+          <h2 class="text-xl font-semibold mb-3">有色玻璃</h2>
+          <p class="text-white/80 mb-4">
+            带有颜色的透明玻璃，可以匹配品牌色调。
+          </p>
+          <div class="text-sm bg-black/20 rounded-lg p-3">
+            <code>rgba(74, 144, 226, 0.15)</code>
+          </div>
+        </div>
+
+        <!-- 纹理玻璃 -->
+        <div class="textured-glass rounded-2xl p-6 text-white">
+          <h2 class="text-xl font-semibold mb-3">纹理玻璃</h2>
+          <p class="text-white/80 mb-4">带有细微纹理图案，增加视觉深度。</p>
+          <div class="text-sm bg-black/20 rounded-lg p-3">
+            <code>径向渐变纹理</code>
+          </div>
+        </div>
+
+        <!-- 分层玻璃 -->
+        <div class="rounded-2xl p-6 text-white relative overflow-hidden">
+          <div class="absolute inset-0 bg-blue-500/10 rounded-2xl"></div>
+          <div class="absolute inset-2 bg-purple-500/10 rounded-xl"></div>
+          <div class="absolute inset-4 bg-pink-500/10 rounded-lg"></div>
+          <div class="relative z-10">
+            <h2 class="text-xl font-semibold mb-3">分层玻璃</h2>
+            <p class="text-white/80 mb-4">多层透明叠加，创造深度效果。</p>
+            <div class="text-sm bg-black/20 rounded-lg p-3">
+              <code>多层绝对定位元素</code>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 实际应用示例 -->
+      <div class="mt-12 grid grid-cols-1 md:grid-cols-2 gap-8">
+        <!-- 导航栏示例 -->
+        <div class="rounded-2xl overflow-hidden">
+          <div class="bg-gray-900 p-4">
+            <div class="clear-glass rounded-xl p-4">
+              <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-4">
+                  <div class="w-8 h-8 bg-white/20 rounded"></div>
+                  <span class="text-white font-semibold">透明导航栏</span>
+                </div>
+                <div class="flex space-x-2">
+                  <button
+                    class="px-3 py-1 bg-white/10 hover:bg-white/20 rounded transition"
+                  >
+                    菜单
+                  </button>
+                  <button
+                    class="px-3 py-1 bg-white/10 hover:bg-white/20 rounded transition"
+                  >
+                    设置
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 卡片组示例 -->
+        <div class="rounded-2xl overflow-hidden">
+          <div class="bg-gray-900 p-4">
+            <div class="flex space-x-4">
+              <div class="frosted-glass rounded-lg p-3 flex-1 text-center">
+                <div class="text-white/60 text-sm">收入</div>
+                <div class="text-white font-bold">¥12,450</div>
+              </div>
+              <div class="tinted-glass rounded-lg p-3 flex-1 text-center">
+                <div class="text-white/60 text-sm">用户</div>
+                <div class="text-white font-bold">1,234</div>
+              </div>
+              <div class="reflective-glass rounded-lg p-3 flex-1 text-center">
+                <div class="text-white/60 text-sm">增长</div>
+                <div class="text-white font-bold">+12.5%</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 代码实现说明 -->
+      <div class="mt-12 frosted-glass rounded-2xl p-6 text-white">
+        <h2 class="text-2xl font-bold mb-4">实现要点</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <h3 class="text-lg font-semibold mb-3">核心技巧</h3>
+            <ul class="space-y-2 text-white/80">
+              <li>• 使用 rgba() 控制透明度</li>
+              <li>• 添加细微边框增强边缘</li>
+              <li>• 使用阴影创造深度</li>
+              <li>• 伪元素添加高光和纹理</li>
+              <li>• 渐变创造视觉层次</li>
+            </ul>
+          </div>
+          <div>
+            <h3 class="text-lg font-semibold mb-3">优势</h3>
+            <ul class="space-y-2 text-white/80">
+              <li>✓ 更好的性能（无模糊计算）</li>
+              <li>✓ 保持背景清晰可见</li>
+              <li>✓ 更广泛的浏览器支持</li>
+              <li>✓ 更精确的颜色控制</li>
+              <li>✓ 更容易实现动画效果</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

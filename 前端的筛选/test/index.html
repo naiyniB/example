@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>分类和标签筛选</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div id="app">
+      <h1>分类和标签筛选</h1>
+
+      <!-- 分类筛选 -->
+      <div class="filters">
+        <h3>选择分类：</h3>
+        <div>
+          <label>
+            <input
+              type="checkbox"
+              value="Electronics"
+              class="category-filter"
+            />
+            Electronics
+          </label>
+          <label>
+            <input type="checkbox" value="Clothing" class="category-filter" />
+            Clothing
+          </label>
+          <label>
+            <input type="checkbox" value="Home" class="category-filter" /> Home
+          </label>
+        </div>
+      </div>
+
+      <!-- 标签筛选 -->
+      <div class="filters">
+        <h3>选择标签：</h3>
+        <div>
+          <label>
+            <input type="checkbox" value="New" class="tag-filter" /> New
+          </label>
+          <label>
+            <input type="checkbox" value="Sale" class="tag-filter" /> Sale
+          </label>
+          <label>
+            <input type="checkbox" value="Hot" class="tag-filter" /> Hot
+          </label>
+          <label>
+            <input type="checkbox" value="Popular" class="tag-filter" /> Popular
+          </label>
+        </div>
+      </div>
+
+      <!-- 筛选结果 -->
+      <div>
+        <h3>筛选结果：</h3>
+        <ul id="filtered-items"></ul>
+      </div>
+    </div>
+
+    <script src="app.js"></script>
+  </body>
+</html>

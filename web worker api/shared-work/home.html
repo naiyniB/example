@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Page 2</title>
+  </head>
+  <body>
+    <h1>Page 2</h1>
+    <p>Shared counter value: <span id="counter">0</span></p>
+
+    <script>
+      // 创建 Shared Worker
+      const sharedWorker = new SharedWorker("shared-worker.js");
+      sharedWorker.port.start(); // 启动 Worker 连接
+
+      // 获取显示计数的元素
+      const counterDisplay = document.getElementById("counter");
+
+      // 向 Worker 发送消息，要求获取当前的计数器值
+      sharedWorker.port.postMessage(parseInt(counterDisplay.textContent)); // 发送当前计数值
+
+      // 监听 Worker 返回的更新数据
+      sharedWorker.port.onmessage = (event) => {
+        counterDisplay.textContent = event.data; // 更新页面上的计数器显示
+      };
+    </script>
+  </body>
+</html>
