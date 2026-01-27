@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div class="animated-element">我是一个会动的元素</div>
+    <style>
+      @keyframes example {
+        0% {
+          transform: translateX(0);
+        }
+        50% {
+          transform: translateX(100px);
+        }
+        100% {
+          transform: translateX(0);
+        }
+      }
+      .animated-element {
+        width: 100px;
+        height: 100px;
+        border: 2px saddlebrown solid;
+        animation-name: example;
+        animation-duration: 2s; /* 动画总时长为2秒 */
+      }
+    </style>
+  </body>
+</html>
