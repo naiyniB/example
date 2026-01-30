@@ -1,0 +1,49 @@
+{
+  "env": {
+    "browser": true,
+    "node": true,
+    "es2021": true
+  },
+  "extends": [
+    "eslint:recommended", // 使用 ESLint 推荐的规则
+    "plugin:react/recommended", // 使用 React 推荐的规则
+    "plugin:prettier/recommended" // 使用 Prettier 规则并关闭冲突的 ESLint 规则
+  ],
+  "parserOptions": {
+    "ecmaVersion": 12, // 支持 ES2021 语法（ES12）
+    "sourceType": "module", // 启用 ES6 模块语法（import/export）
+    "ecmaFeatures": {
+      "jsx": true // 启用 JSX 语法支持（适用于 React）
+    }
+  },
+  "plugins": [
+    "react", // 启用 React 插件
+    "prettier" // 启用 Prettier 插件
+  ],
+  "rules": {
+    "no-console": "warn", // 警告使用 console
+    "no-unused-vars": "warn", // 警告未使用的变量
+    "no-undef": "error", // 报错使用未声明的变量
+    "react/prop-types": "off", // 关闭 PropTypes 检查（可以根据需要打开）
+    "react/react-in-jsx-scope": "off", // React 17+ 可以省略引入 React，因此关闭这个规则
+    "semi": ["error", "always"], // 强制使用分号
+    "quotes": ["error", "single"], // 强制使用单引号
+    "indent": ["error", 2], // 强制使用 2 个空格进行缩进
+    "linebreak-style": ["error", "unix"], // 强制使用 UNIX 风格的换行符（\n）
+    "prettier/prettier": [
+      "error",
+      {
+        "singleQuote": true, // Prettier 配置：使用单引号
+        "semi": true, // Prettier 配置：使用分号
+        "trailingComma": "es5", // Prettier 配置：在对象和数组最后一个元素后加逗号（ES5 格式）
+        "tabWidth": 2, // Prettier 配置：设置缩进为 2 个空格
+        "useTabs": false // Prettier 配置：禁用使用 tab 键缩进
+      }
+    ]
+  },
+  "settings": {
+    "react": {
+      "version": "detect" // 自动检测 React 的版本
+    }
+  }
+}
