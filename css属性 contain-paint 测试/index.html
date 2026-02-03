@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="zh">
+  <head>
+    <meta charset="UTF-8" />
+    <title>CSS 性能隔离终极测试</title>
+    <style>
+      :root {
+        --box-size: 500px;
+      }
+      body {
+        background: #1a1a1a;
+        color: white;
+        font-family: system-ui;
+        padding: 50px;
+      }
+
+      /* 1. 外部环境（模拟复杂的网页背景） */
+      .page-background {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+          45deg,
+          #1a1a1a 25%,
+          #222 25%,
+          #222 50%,
+          #1a1a1a 50%,
+          #1a1a1a 75%,
+          #222 75%
+        );
+        background-size: 40px 40px;
+        z-index: -1;
+      }
+
+      .controls {
+        margin-bottom: 30px;
+        background: rgba(255, 255, 255, 0.1);
+        padding: 20px;
+        border-radius: 12px;
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+      }
+      button {
+        padding: 10px 20px;
+        cursor: pointer;
+        background: #3b82f6;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        font-weight: bold;
+      }
+      button:hover {
+        background: #2563eb;
+      }
+
+      /* 2. 测试容器 */
+      .test-box {
+        width: var(--box-size);
+        height: var(--box-size);
+        border: 4px dashed #666;
+        position: relative;
+        margin: 0 auto;
+        background: rgba(0, 0, 0, 0.5);
+        /* 初始状态：不开启隔离 */
+        transition: border-color 0.3s;
+      }
+
+      /* 开启隔离时的样式 */
+      .is-contained {
+        contain: paint;
+        border: 4px solid #00ff00;
+        box-shadow: 0 0 30px rgba(0, 255, 0, 0.2);
+      }
+
+      /* 3. 性能杀手：模拟重绘的小球 */
+      .dot {
+        position: absolute;
+        width: 40px;
+        height: 40px;
+        background: #ff4757;
+        border-radius: 50%;
+        /* 使用 box-shadow 和模糊，强制 CPU 进行大量像素重计算 */
+        box-shadow: 0 0 20px 10px rgba(255, 71, 87, 0.5);
+        /* 关键：不使用 transform，改用 top/left 强制触发 Repaint */
+        animation: glitch 1.5s infinite alternate ease-in-out;
+      }
+
+      @keyframes glitch {
+        from {
+          left: -50px;
+          top: 0;
+        }
+        to {
+          left: 550px;
+          top: 400px;
+        } /* 故意跨越边界 */
+      }
+    </style>
+  </head>
+  <body>
+    <div class="page-background"></div>
+
+    <div class="controls">
+      <h1>性能隔离测试 (Paint Containment)</h1>
+      <p>
+        1. 按 <b>F12</b> -> <b>Ctrl+Shift+P</b> -> 输入
+        <b>"显示重绘区域" (Paint flashing)</b> 并开启。
+      </p>
+      <p>2. 注意观察：红色球移动时，绿色的“重绘方块”在哪里闪烁。</p>
+      <button onclick="toggleContain()">切换 contain: paint</button>
+      <span id="label" style="margin-left: 20px; color: #ff4757"
+        >当前状态：未隔离 (全域重绘)</span
+      >
+    </div>
+
+    <div class="test-box" id="testBox"></div>
+
+    <script>
+      const box = document.getElementById("testBox");
+      const label = document.getElementById("label");
+
+      // 生成足够多的小球来制造压力
+      for (let i = 0; i < 20; i++) {
+        const dot = document.createElement("div");
+        dot.className = "dot";
+        dot.style.top = i * 25 + "px";
+        dot.style.animationDelay = i * 0.1 + "s";
+        box.appendChild(dot);
+      }
+
+      function toggleContain() {
+        const active = box.classList.toggle("is-contained");
+        label.innerText = active
+          ? "当前状态：已隔离 (绿光不出盒)"
+          : "当前状态：未隔离 (全域重绘)";
+        label.style.color = active ? "#00ff00" : "#ff4757";
+      }
+    </script>
+  </body>
+</html>
