@@ -65,7 +65,6 @@ function Createsocket() {
   socket = new WebSocket("ws://localhost:8080");
   socket.onopen = () => {
     console.log("连接已建立");
-    socket.send("你好，服务器！"); // 发送消息
   };
 
   // 3. 监听服务器发来的消息

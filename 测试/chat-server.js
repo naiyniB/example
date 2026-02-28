@@ -10,15 +10,21 @@ wss.on("connection", (ws) => {
   ws.on("message", (data) => {
     // 原生收到的是 Buffer 数据，需要转成字符串
     console.log("收到消息:", data.toString());
-    user.forEach((ws) => {
-      if (ws != this) {
-        ws.send("新用户已经上线，当前人数" + user.length);
+    user.forEach((client) => {
+      // 改名为 client 避免冲突
+      if (client !== ws) {
+        // 直接用外层的 ws，不用 this
+        client.send(data.toString());
       }
     });
   });
 
-  ws.on("close", () => {
-    console.log("客户端已断开");
+  wss.on("close", () => {
+    const index = user.indexOf(ws);
+    if (index !== -1) {
+      user.splice(index, 1); // 从数组中移除断开的连接
+    }
+    console.log("客户端已断开，当前人数:", user.length);
   });
 });
 
