@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <!-- 滚动 -->
+  <body>
+    <div class="nav">
+      <ul>
+        <li class="link"><a href="#section1">section1</a></li>
+        <li class="link"><a href="#section2">section2</a></li>
+        <li class="link"><a href="#section3">section3</a></li>
+      </ul>
+    </div>
+    <div
+      style="
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        justify-content: center;
+        align-items: center;
+      "
+    >
+      <div id="section1" class="section">section1</div>
+      <div id="section2" class="section">section2</div>
+      <div id="section3" class="section">section3</div>
+    </div>
+  </body>
+  <style>
+    .section {
+      height: 500px;
+      width: 500px;
+      border: 2px solid #000;
+    }
+    .active {
+      color: red;
+    }
+    .nav {
+      position: sticky;
+      top: 0;
+    }
+    html {
+      scroll-behavior: smooth;
+    }
+  </style>
+  <script>
+    const links = document.querySelectorAll(".nav a");
+    const sections = document.querySelectorAll(".section");
+    // 节流
+    function throttle(func, wait) {
+      let timeout = null;
+      return function (...arg) {
+        if (!timeout) {
+          timeout = setTimeout(() => {
+            func.apply(this, arg);
+            timeout = null;
+          }, wait);
+        }
+      };
+    }
+    const handleScroll = throttle((sections) => {
+      console.log(new Date().getTime() + "执行时间");
+
+      sections.forEach((section) => {
+        if (
+          section.offsetTop <= window.scrollY &&
+          section.offsetTop + section.offsetHeight > window.scrollY
+        ) {
+          links.forEach((link) => {
+            link.classList.remove("active");
+          });
+          const activeLink = document.querySelector(
+            `.nav a[href="#${section.id}"]`
+          );
+          activeLink?.classList.add("active");
+        }
+      });
+    }, 1000);
+    window.addEventListener("scroll", () => {
+      handleScroll(sections);
+    });
+  </script>
+</html>

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div
+      style="
+        width: 200px;
+        height: 200px;
+        border: 1px solid #000;
+        overflow: hidden;
+        margin: 0 auto;
+      "
+    >
+      <div style="display: flex" id="container">
+        <div style="min-width: 200px; height: 500px; background-color: red">
+          1
+        </div>
+        <div style="min-width: 200px; height: 500px; background-color: green">
+          2
+        </div>
+        <div style="min-width: 200px; height: 500px; background-color: blue">
+          3
+        </div>
+        <div style="min-width: 200px; height: 500px; background-color: yellow">
+          4
+        </div>
+        <div style="min-width: 200px; height: 500px; background-color: purple">
+          5
+        </div>
+        <div style="min-width: 200px; height: 500px; background-color: red">
+          1
+        </div>
+        <div style="min-width: 200px; height: 500px; background-color: green">
+          2
+        </div>
+        <div style="min-width: 200px; height: 500px; background-color: blue">
+          3
+        </div>
+        <div style="min-width: 200px; height: 500px; background-color: yellow">
+          4
+        </div>
+        <div style="min-width: 200px; height: 500px; background-color: purple">
+          5
+        </div>
+      </div>
+    </div>
+    <script>
+      const container = document.getElementById("container");
+      const slideWidth = 200;
+      const realSlideCount = container.children.length / 2;
+      let index = 0;
+      let needsTransitionRestore = false;
+
+      container.style.transition = "transform 0.5s ease-in-out";
+
+      container.addEventListener("transitionend", () => {
+        if (index !== realSlideCount) return;
+        container.style.transition = "none";
+        container.style.transform = "translateX(0px)";
+        index = 0;
+        needsTransitionRestore = true;
+      });
+
+      setInterval(() => {
+        if (needsTransitionRestore) {
+          needsTransitionRestore = false;
+          requestAnimationFrame(() => {
+            container.style.transition = "transform 0.5s ease-in-out";
+            index = 1;
+            container.style.transform = `translateX(-${index * slideWidth}px)`;
+          });
+          return;
+        }
+        index += 1;
+        container.style.transform = `translateX(-${index * slideWidth}px)`;
+        if (index === realSlideCount) {
+          // allow transitionend handler to snap back
+          index = realSlideCount;
+        }
+      }, 1000);
+    </script>
+  </body>
+</html>

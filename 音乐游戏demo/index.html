@@ -1,0 +1,179 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Web Band MVP - Fix Version</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/15.1.22/Tone.js"></script>
+    <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+    <style>
+      body {
+        background: #1a1a1a;
+        color: white;
+        font-family: sans-serif;
+        text-align: center;
+      }
+      .lane-container {
+        display: flex;
+        justify-content: center;
+        margin-top: 20px;
+      }
+      canvas {
+        background: #000;
+        border: 2px solid #444;
+        border-radius: 8px;
+      }
+      .controls {
+        margin: 20px;
+        padding: 20px;
+        border: 1px dashed #666;
+        background: #222;
+      }
+      button {
+        padding: 12px 24px;
+        cursor: pointer;
+        background: #444;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        font-size: 16px;
+      }
+      button:active {
+        background: #28a745;
+      }
+      #status-log {
+        height: 80px;
+        overflow-y: auto;
+        font-size: 14px;
+        color: #aaa;
+        margin-top: 10px;
+        border-top: 1px solid #333;
+        padding-top: 10px;
+      }
+      .highlight {
+        color: #28a745;
+        font-weight: bold;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>🎸 网页联机乐队 (3100 修复版)</h1>
+
+    <div class="controls">
+      <div id="step1">
+        <h3>第一步：激活声音引擎</h3>
+        <button id="start-btn">点击激活音频 (必须点击!)</button>
+      </div>
+
+      <div id="step2" style="display: none">
+        <h3>第二步：选择你的乐器并开始演奏</h3>
+        <p>选好后，按键盘 <span class="highlight">任意键</span> 发声</p>
+        <button onclick="setRole('piano')">钢琴 (A)</button>
+        <button onclick="setRole('drum')">架子鼓 (B)</button>
+        <button onclick="setRole('synth')">合成器 (C)</button>
+      </div>
+    </div>
+
+    <div class="lane-container">
+      <canvas id="gameCanvas" width="400" height="400"></canvas>
+    </div>
+
+    <div id="status-log">等待连接服务器...</div>
+
+    <script>
+      // 1. 明确指向 3100 端口，解决 5501 跨域问题
+      const socket = io("http://127.0.0.1:3100");
+
+      let myRole = null;
+      let isReady = false;
+
+      // 状态日志
+      const log = (msg) => {
+        const div = document.getElementById("status-log");
+        div.innerHTML =
+          `<div>${new Date().toLocaleTimeString()}: ${msg}</div>` +
+          div.innerHTML;
+      };
+
+      socket.on("connect", () =>
+        log('<span class="highlight">✅ 已连接到 3100 端口服务器</span>'),
+      );
+      socket.on("connect_error", () =>
+        log(
+          '<span style="color:red">❌ 连接失败，请检查 server.js 是否运行</span>',
+        ),
+      );
+
+      // 2. 音色初始化
+      const sounds = {
+        piano: new Tone.Synth({ oscillator: { type: "sine" } }).toDestination(),
+        drum: new Tone.MembraneSynth().toDestination(),
+        synth: new Tone.AMSynth().toDestination(),
+      };
+
+      // 3. 处理点击激活 (解决 AudioContext 报错)
+      document.getElementById("start-btn").onclick = async () => {
+        try {
+          await Tone.start();
+          isReady = true;
+          log("✅ 音频引擎已启动！");
+          document.getElementById("step1").style.display = "none";
+          document.getElementById("step2").style.display = "block";
+        } catch (e) {
+          log("启动失败: " + e);
+        }
+      };
+
+      const canvas = document.getElementById("gameCanvas");
+      const ctx = canvas.getContext("2d");
+      let notes = [];
+      const roleConfig = {
+        piano: { x: 80, color: "#4CAF50", note: "C4" },
+        drum: { x: 200, color: "#FF5722", note: "C2" },
+        synth: { x: 320, color: "#2196F3", note: "G4" },
+      };
+
+      function setRole(role) {
+        myRole = role;
+        log(`已切换角色为: ${role}`);
+      }
+
+      // 按键发送
+      window.onkeydown = (e) => {
+        if (!myRole || !isReady) return;
+        socket.emit("play_note", { role: myRole });
+      };
+
+      // 接收同步
+      socket.on("listen_note", (data) => {
+        const config = roleConfig[data.role];
+        if (!config) return;
+
+        // 只有激活了声音的人才能听到
+        if (isReady) {
+          sounds[data.role].triggerAttackRelease(config.note, "8n");
+        }
+
+        notes.push({ x: config.x, y: 0, color: config.color });
+        log(`乐手 [${data.role}] 演奏了音符`);
+      });
+
+      // 渲染循环
+      function draw() {
+        ctx.fillStyle = "rgba(0,0,0,0.2)";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.strokeStyle = "#333";
+        ctx.strokeRect(0, 350, 400, 1);
+
+        notes.forEach((n, i) => {
+          n.y += 5;
+          ctx.fillStyle = n.color;
+          ctx.beginPath();
+          ctx.arc(n.x, n.y, 15, 0, Math.PI * 2);
+          ctx.fill();
+          if (n.y > 450) notes.splice(i, 1);
+        });
+        requestAnimationFrame(draw);
+      }
+      draw();
+    </script>
+  </body>
+</html>

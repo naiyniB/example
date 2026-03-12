@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+     
+      .container {
+        width: 1000px;
+        height: 200px;
+        margin: 20px auto;
+        border: 1px solid #ccc;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 20px;
+      }
+      h2 {
+        text-align: center;
+      }
+      .item {
+        width: 100px;
+        height: 100px;
+        background-color: #ccc;
+        text-align: center;
+        line-height: 100px;
+      }
+      .log-container {
+        overflow: scroll;
+        width: 1000px;
+        height: 200px;
+        margin: 20px auto;
+        border: 1px solid #ccc;
+        padding: 10px;
+        font-family: monospace;
+        white-space: pre-wrap;
+      }
+    </style>
+  </head>
+  <body>
+    <h2>itme 区域</h2>
+    <div class="container" id="item-container">
+      <div class="item" draggable="true">Item 1</div>
+      <div class="item" draggable="true">Item 2</div>
+      <div class="item" draggable="true">Item 3</div>
+      <div class="item" draggable="true">Item 4</div>
+    </div>
+    <h2>drop 区域</h2>
+    <div class="container" id="drop-container"></div>
+    <h2>log 区域</h2>
+    <div style="text-align: center;"><button type="button">清空日志</button></div>
+    <div class="log-container" id="log-container"></div>
+    <script src="./app.js"></script>
+  </body>
+</html>

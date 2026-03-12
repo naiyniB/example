@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div class="nav">
+      <li class="active"><i>🏠</i></li>
+      <li><i>📦</i></li>
+      <li><i>🔧</i></li>
+      <li><i>👥</i></li>
+      <li><i>📞</i></li>
+      <div class="indicator"></div>
+    </div>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        background: #222327;
+      }
+      .nav {
+        border: 1px solid #df0f0f;
+        width: 400px;
+        height: 70px;
+        background: #fff;
+        border-radius: 10px;
+        padding: 10px;
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .nav li {
+        width: 70px;
+        height: 70px;
+        z-index: 1;
+        position: relative;
+        list-style: none;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+      }
+      .nav li i {
+        display: block;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 10px;
+        font-size: 24px;
+        text-align: center;
+      }
+      .nav li.active i {
+        transform: translateY(-60%);
+        color: #fff;
+        padding: 10px;
+        transition: transform 0.5s;
+      }
+      .indicator {
+        width: 70px;
+        height: 70px;
+        background: #0936eb;
+        /* border-radius: 50%; */
+        position: absolute;
+        top: -50%;
+        left: 6%;
+        padding: 10px;
+        border: 6px solid #222327;
+        transition: transform 0.5s;
+      }
+      .indicator::after {
+        content: "";
+        width: 10px;
+        height: 10px;
+        background: #0936eb;
+        /* border-radius: 50%; */
+        position: absolute;
+        top: 46%;
+        transform: translateX(-50%);
+        left: -10px;
+      }
+      .indicator::before {
+        content: "";
+        width: 10px;
+        height: 10px;
+        background: #fa6305;
+        position: absolute;
+        top: 46%;
+        /* transform: translateX(100%); */
+        left: 100px;
+      }
+      li:nth-child(1).active ~ .indicator {
+        transform: translateX(0);
+      }
+      li:nth-child(2).active ~ .indicator {
+        transform: translateX(70px);
+      }
+      li:nth-child(3).active ~ .indicator {
+        transform: translateX(140px);
+      }
+      li:nth-child(4).active ~ .indicator {
+        transform: translateX(210px);
+      }
+      li:nth-child(5).active ~ .indicator {
+        transform: translateX(280px);
+      }
+    </style>
+    <script>
+      const li = document.querySelectorAll(".nav li");
+      li.forEach((element) => {
+        element.addEventListener("click", () => {
+          li.forEach((item) => {
+            item.classList.remove("active");
+            element.classList.add("active");
+          });
+        });
+      });
+    </script>
+  </body>
+</html>

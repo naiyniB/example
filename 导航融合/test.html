@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div class="inner-curve-2"></div>
+    <div class="inner-curve-1">
+      <div class="g-rect"></div>
+    </div>
+    <style>
+      body,
+      html {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+      }
+
+      @property --ca {
+        syntax: "<color>";
+        inherits: false;
+        initial-value: #000;
+      }
+
+      @property --cb {
+        syntax: "<color>";
+        inherits: false;
+        initial-value: #ce03f1;
+      }
+
+      @property --cc {
+        syntax: "<color>";
+        inherits: false;
+        initial-value: #ce03f1;
+      }
+
+      body > div {
+        position: relative;
+        margin: auto;
+        width: 300px;
+        height: 100px;
+        background: #3f51b5;
+      }
+
+      .inner-curve-1 {
+        background: radial-gradient(
+          circle at 50% -10px,
+          var(--cc),
+          var(--cc) 40px,
+          #3f51b5 calc(40px + 0.5px),
+          #3f51b5
+        );
+        animation: colorChange 6s infinite linear;
+
+        .g-rect {
+          position: absolute;
+          width: 300px;
+          height: 20px;
+          left: 0;
+          top: -15px;
+          background: linear-gradient(
+            90deg,
+            var(--ca),
+            var(--ca) 93px,
+            transparent 93px,
+            transparent calc(300px - 93px),
+            var(--ca) calc(300px - 93px),
+            var(--ca)
+          );
+          z-index: -1;
+          animation: colorChange 6s infinite linear;
+        }
+
+        &::before,
+        &::after {
+          content: "";
+          position: absolute;
+          width: 40px;
+          height: 40px;
+          border-radius: 50%;
+          background: var(--cb);
+          top: -15px;
+          left: 72px;
+          animation: colorChange 6s infinite linear;
+        }
+
+        &::after {
+          left: unset;
+          right: 72px;
+        }
+      }
+
+      .inner-curve-2 {
+        --r: 20px;
+        --s: 40px;
+        --a: 20deg;
+
+        --_m: 0/calc(2 * var(--r)) var(--r) no-repeat
+          radial-gradient(
+            50% 100% at bottom,
+            #000 calc(100% - 1px),
+            transparent
+          );
+        --_d: (var(--s) + var(--r)) * cos(var(--a));
+        mask:
+          calc(50% + var(--_d)) var(--_m),
+          calc(50% - var(--_d)) var(--_m),
+          radial-gradient(
+              var(--s) at 50% calc(-1 * sin(var(--a)) * var(--s)),
+              transparent 100%,
+              #000 calc(100% + 1px)
+            )
+            0 calc(var(--r) * (1 - sin(var(--a)))),
+          linear-gradient(
+            90deg,
+            #000 calc(50% - var(--_d)),
+            transparent 0 calc(50% + var(--_d)),
+            #000 0
+          );
+        mask-repeat: no-repeat;
+      }
+
+      @keyframes colorChange {
+        0% {
+          --ca: #000;
+          --cb: #ce03f1;
+          --cc: #ce03f1;
+        }
+        70%,
+        100% {
+          --ca: #3f51b5;
+          --cb: #3f51b5;
+          --cc: #fff;
+        }
+      }
+    </style>
+  </body>
+</html>

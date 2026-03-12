@@ -1,0 +1,93 @@
+<!doctype html>
+<html>
+  <head>
+    <style>
+      body {
+        margin: 0;
+        font-family: sans-serif;
+      }
+
+      .header {
+        height: 60vh;
+        background: #eee;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      /* ------------------------------------------------ */
+      /* 核心：一个用了 content-visibility 但没给高度的组件 */
+      /* ------------------------------------------------ */
+      .pc-slot {
+        content-visibility: auto;
+        contain-intrinsic-size: auto;
+        height: 1000px;
+        background: #3498db;
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 30px;
+      }
+
+      .footer {
+        height: 800px;
+        background: #2c3e50;
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      /* 控制面板 */
+      .panel {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: white;
+        border: 3px solid red;
+        padding: 15px;
+        z-index: 100;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      }
+      button {
+        font-size: 18px;
+        padding: 10px;
+        cursor: pointer;
+        background: red;
+        color: white;
+        border: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="panel">
+      <p>
+        <b>第一步：</b>请向下滚动，直到看到蓝色盒子下面的<b>深灰色页脚</b>。
+      </p>
+      <p><b>第二步：</b>在看到页脚的状态下，点击下方按钮：</p>
+      <button onclick="collapse()">模拟端切换：隐藏蓝色 PC 插槽</button>
+    </div>
+
+    <div class="header"><h1>1. 请往下滚 ↓</h1></div>
+
+    <div id="target" class="pc-slot">我是 1000px 高的 PC 插槽内容</div>
+
+    <div class="footer">
+      <h1>2. 看到这个深灰色页脚了吗？保持住，去点按钮！</h1>
+    </div>
+
+    <script>
+      function collapse() {
+        const el = document.getElementById("target");
+        // 模拟在移动端时，我们直接把 PC 插槽隐藏掉
+        el.style.display = "none";
+
+        // 提醒用户看屏幕
+        alert(
+          "按钮已点！注意看：由于没有占位高度，刚才 1000px 的空间瞬间蒸发了！你的页面是不是猛地向上“跳”了？",
+        );
+      }
+    </script>
+  </body>
+</html>

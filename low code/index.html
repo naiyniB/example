@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Low-code Demo</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        display: flex;
+        justify-content: space-between;
+        padding: 20px;
+      }
+      .palette,
+      .canvas,
+      .property-panel {
+        border: 1px solid #ccc;
+        padding: 20px;
+        width: 30%;
+        min-height: 300px;
+      }
+      .palette .component {
+        padding: 10px;
+        margin: 5px;
+        background-color: #f0f0f0;
+        cursor: pointer;
+        border: 1px dashed #ccc;
+      }
+      .canvas {
+        min-height: 200px;
+        background-color: #f9f9f9;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+      .component-in-canvas {
+        border: 1px solid #ccc;
+        padding: 10px;
+        background-color: #e0e0e0;
+        cursor: move;
+      }
+      .component-in-canvas:focus {
+        border-color: #00f;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="palette">
+      <h3>Components</h3>
+      <div class="component" data-type="text" draggable="true">Text</div>
+      <div class="component" data-type="button" draggable="true">Button</div>
+    </div>
+
+    <div class="canvas" id="canvas">
+      <h3>Canvas</h3>
+    </div>
+
+    <div class="property-panel" id="property-panel">
+      <h3>Properties</h3>
+      <div id="property-input">
+        <!-- This will dynamically show input for properties -->
+      </div>
+    </div>
+
+    <script src="app.js"></script>
+  </body>
+</html>

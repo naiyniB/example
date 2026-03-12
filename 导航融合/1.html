@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>图层混合效果</title>
+    <style>
+      /* 容器基本样式 */
+      .container {
+        width: 300px;
+        height: 300px;
+        background:
+          url("https://via.placeholder.com/300x300.png") no-repeat center center,
+          rgba(255, 0, 0, 0.5); /* 背景图和半透明红色层 */
+        background-size: cover;
+        background-blend-mode: overlay; /* 背景混合模式 */
+        position: relative; /* 使叠加图层可以被绝对定位 */
+      }
+
+      /* 叠加层 */
+      .layer {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 255, 0.5); /* 蓝色半透明 */
+        mix-blend-mode: screen; /* 混合模式 */
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="layer"></div>
+      <!-- 蓝色叠加层 -->
+    </div>
+  </body>
+</html>

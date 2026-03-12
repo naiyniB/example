@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div class="container">
+      <div class="logos" id="logos">
+        <div class="logo">logo1</div>
+        <div class="logo">logo2</div>
+        <div class="logo">logo3</div>
+        <div class="logo">logo4</div>
+        <div class="logo">logo5</div>
+      </div>
+    </div>
+    <style>
+      .container {
+        margin: auto;
+        width: 500px;
+        overflow: hidden;
+      }
+      .logos {
+        width: fit-content;
+        height: 100px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .logo {
+        width: 200px;
+        height: 80px;
+        background-color: #ccc;
+        margin: 0 10px;
+      }
+    </style>
+    <script>
+      class Marquee {
+        constructor(containerId, speed = 3) {
+          this.container = document.getElementById(containerId);
+          if (!this.container)
+            throw new Error(`Element with id "${containerId}" not found.`);
+
+          this.speed = speed; // 每帧移动的像素
+          this.translateX = 0;
+
+          // 保存原始子元素
+          this.originalChildren = Array.from(this.container.children);
+
+          // 克隆一次形成无缝循环
+          this.originalChildren.forEach((child) =>
+            this.container.appendChild(child.cloneNode(true)),
+          );
+
+          // 容器宽度的一半
+          this.itemsWidth = this.container.scrollWidth / 2;
+
+          this.animate = this.animate.bind(this); // 确保 this 指向类实例
+          requestAnimationFrame(this.animate);
+        }
+
+        animate() {
+          this.container.style.transform = `translateX(${this.translateX}px)`;
+          this.translateX -= this.speed;
+
+          if (this.translateX <= -this.itemsWidth) {
+            this.translateX = 0; // 回到起点
+          }
+
+          requestAnimationFrame(this.animate);
+        }
+      }
+
+      // 使用示例
+      const marquee = new Marquee("logos", 3);
+    </script>
+  </body>
+</html>

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CSS Arc Orbit</title>
+    <style>
+     
+      .arc-viewport {
+        margin: 100px auto;
+        border-radius: 50%;
+        position: relative;
+        width: 2000px;
+        height: 2000px;
+        border: 1px solid red;
+        animation: orbit 30s linear infinite;
+      }
+
+      .card {
+        position: absolute;
+        width: 150px;
+        height: 150px;
+        background-color: red;
+      }
+    </style>
+  </head>
+  <body>
+    <div style="height: 500px; border: 1px solid red"></div>
+    <div style="width: 100%; height: 600px;overflow: hidden">
+      <div class="arc-viewport">
+        <div class="card">1</div>
+        <div class="card">2</div>
+        <div class="card">3</div>
+        <div class="card">4</div>
+        <div class="card">5</div>
+        <div class="card">6</div>
+        <div class="card">7</div>
+        <div class="card">7</div>
+        <div class="card">7</div>
+        <div class="card">7</div>
+        <div class="card">7</div>
+        <div class="card">7</div>
+        <div class="card">7</div>
+        <div class="card">7</div>
+        <div class="card">7</div>
+        <div class="card">7</div>
+        <div class="card">7</div>
+        <div class="card">7</div>
+        <div class="card">7</div>
+        <div class="card">7</div>
+      </div>
+    </div>
+    123
+  </body>
+  <script>
+    const arcViewport = document.querySelector(".arc-viewport");
+    const cards = document.querySelectorAll(".card");
+    const radius = arcViewport.offsetWidth / 2;
+    const centerX = arcViewport.offsetWidth / 2;
+    const centerY = arcViewport.offsetHeight / 2;
+    const angleOffset = -Math.PI / 2; // 让第一个卡片从 12 点位置起步（0°）
+    cards.forEach((card, index) => {
+      const angle = (2 * Math.PI * index) / cards.length + angleOffset;
+      const x = centerX + radius * Math.cos(angle) - card.offsetWidth / 2;
+      const y = centerY + radius * Math.sin(angle) - card.offsetHeight / 2;
+      card.style.left = x + "px";
+      card.style.top = y + "px";
+      card.style.transform = `rotate(${angle + Math.PI / 2}rad)`;
+    });
+  </script>
+</html>

@@ -1,0 +1,29 @@
+{
+  "name": "anlib",
+  "version": "0.1.0",
+  "description": "Headless interaction core with Astro component wrappers for carousel, marquee and tabs.",
+  "type": "module",
+  "license": "MIT",
+  "files": [
+    "src",
+    "dist"
+  ],
+  "sideEffects": false,
+  "exports": {
+    ".": "./src/index.ts",
+    "./core": "./src/core/index.ts",
+    "./astro-core": "./src/astro-core/index.ts",
+    "./astro-core/components/Carousel.astro": "./src/astro-core/components/Carousel.astro",
+    "./astro-core/components/Marquee.astro": "./src/astro-core/components/Marquee.astro",
+    "./astro-core/components/Tabs.astro": "./src/astro-core/components/Tabs.astro"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit"
+  },
+  "peerDependencies": {
+    "astro": "^5.0.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.2"
+  }
+}

@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="zh">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>弹幕效果</title>
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        background-color: #000;
+        color: white;
+      }
+
+      /* 弹幕容器 */
+      .danmu-container {
+        position: relative;
+        width: 100%;
+        height: 100px; /* 高度根据需要调整 */
+        overflow: hidden;
+        z-index: 10;
+      }
+
+      /* 弹幕样式 */
+      .danmu {
+        position: absolute;
+        white-space: nowrap;
+        font-size: 20px;
+        color: #fff;
+        background-color: rgba(0, 0, 0, 0.5);
+        padding: 5px;
+        border-radius: 10px;
+        animation: danmuAnimation 5s linear infinite;
+      }
+
+      /* 弹幕动画，控制从右至左移动 */
+      @keyframes danmuAnimation {
+        from {
+          left: 100%; /* 起始位置是屏幕右侧 */
+        }
+        to {
+          left: -100%; /* 结束位置是屏幕左侧 */
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- 弹幕容器 -->
+    <div class="danmu-container"></div>
+
+    <script>
+      const danmuContainer = document.querySelector(".danmu-container");
+
+      // 弹幕数据
+      const danmus = [
+        "这是一条测试弹幕",
+        "前端技术真好玩！",
+        "欢迎大家来玩",
+        "弹幕效果展示中...",
+        "这是一条非常长的测试弹幕，它的长度会影响到弹幕滚动的速度。",
+        "你也可以添加更多的弹幕信息，来模拟更多内容。",
+        "欢迎大家来玩",
+        "弹幕效果展示中...",
+        "这是一条非常长的测试弹幕，它的长度会影响到弹幕滚动的速度。",
+        "你也可以添加更多的弹幕信息，来模拟更多内容。",
+        "欢迎大家来玩",
+        "弹幕效果展示中...",
+        "这是一条非常长的测试弹幕，它的长度会影响到弹幕滚动的速度。",
+        "你也可以添加更多的弹幕信息，来模拟更多内容。",
+        "欢迎大家来玩",
+        "弹幕效果展示中...",
+        "这是一条非常长的测试弹幕，它的长度会影响到弹幕滚动的速度。",
+        "你也可以添加更多的弹幕信息，来模拟更多内容。",
+        "欢迎大家来玩",
+        "弹幕效果展示中...",
+        "这是一条非常长的测试弹幕，它的长度会影响到弹幕滚动的速度。",
+        "你也可以添加更多的弹幕信息，来模拟更多内容。",
+        "欢迎大家来玩",
+        "弹幕效果展示中...",
+        "这是一条非常长的测试弹幕，它的长度会影响到弹幕滚动的速度。",
+        "你也可以添加更多的弹幕信息，来模拟更多内容。",
+        "欢迎大家来玩",
+        "弹幕效果展示中...",
+        "这是一条非常长的测试弹幕，它的长度会影响到弹幕滚动的速度。",
+        "你也可以添加更多的弹幕信息，来模拟更多内容。",
+        "欢迎大家来玩",
+        "弹幕效果展示中...",
+        "这是一条非常长的测试弹幕，它的长度会影响到弹幕滚动的速度。",
+        "你也可以添加更多的弹幕信息，来模拟更多内容。",
+        "欢迎大家来玩",
+        "弹幕效果展示中...",
+        "这是一条非常长的测试弹幕，它的长度会影响到弹幕滚动的速度。",
+        "你也可以添加更多的弹幕信息，来模拟更多内容。",
+        "欢迎大家来玩",
+        "弹幕效果展示中...",
+        "这是一条非常长的测试弹幕，它的长度会影响到弹幕滚动的速度。",
+        "你也可以添加更多的弹幕信息，来模拟更多内容。",
+        "欢迎大家来玩",
+        "弹幕效果展示中...",
+        "这是一条非常长的测试弹幕，它的长度会影响到弹幕滚动的速度。",
+        "你也可以添加更多的弹幕信息，来模拟更多内容。",
+
+        "欢迎大家来玩",
+        "弹幕效果展示中...",
+        "这是一条非常长的测试弹幕，它的长度会影响到弹幕滚动的速度。",
+        "你也可以添加更多的弹幕信息，来模拟更多内容。",
+      ];
+
+      // 随机生成弹幕
+      function createDanmu() {
+        const danmuText = danmus[Math.floor(Math.random() * danmus.length)];
+        const danmu = document.createElement("div");
+        danmu.classList.add("danmu");
+        danmu.textContent = danmuText;
+
+        // 随机出现时间（每条弹幕的动画时间）
+        const randomDuration = Math.random() * 5 + 5; // 弹幕显示时间在 5s 到 10s 之间
+        danmu.style.animationDuration = `${randomDuration}s`;
+
+        // 随机垂直位置
+        const randomTop = Math.random() * (danmuContainer.offsetHeight - 40);
+        danmu.style.top = `${randomTop}px`;
+
+        // 添加到容器
+        danmuContainer.appendChild(danmu);
+
+        // 一定时间后移除已完成的弹幕
+        setTimeout(() => {
+          danmu.remove();
+        }, randomDuration * 1000); // 动画时长后移除弹幕
+      }
+
+      // 每隔 2 秒创建一条新弹幕
+      setInterval(createDanmu, 2000);
+    </script>
+  </body>
+</html>

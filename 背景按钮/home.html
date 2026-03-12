@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <style>
+      body {
+        background: #0d1125;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100vh; /* 撑开高度居中 */
+        margin: 0;
+      }
+
+      /* 包装层：用来控制所有背景装饰相对于按钮的位置 */
+      .wrapper {
+        position: relative;
+        width: 262px;
+        height: 57px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .container {
+        width: 100%;
+        height: 100%;
+        background-color: #000;
+        border-radius: 68px;
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 2; /* 确保按钮在点点背景之上 */
+      }
+
+      /* --- 外部点状背景图 --- */
+      .dots-bg {
+        position: absolute;
+        width: 400px; /* 比按钮大，形成扩散感 */
+        height: 200px;
+        background-image: url("1.png");
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-position: center;
+        z-index: 1; /* 在按钮下面，弥散光上面 */
+        pointer-events: none; /* 不遮挡鼠标点击 */
+
+        /* 关键：让白色点点与深色背景融合 */
+        opacity: 0.3;
+        mix-blend-mode: screen;
+      }
+
+      .border-svg {
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        z-index: 3;
+      }
+
+      .text {
+        color: white;
+        font-family: sans-serif;
+        font-size: 14px;
+        z-index: 4;
+      }
+
+      /* 弥散发光层（最底层） */
+      .glow-shape1,
+      .glow-shape2 {
+        position: absolute;
+        z-index: 0;
+        pointer-events: none;
+      }
+
+      .glow-shape1 {
+        width: 240px;
+        height: 100px;
+        left: -20px;
+        top: -20px;
+        background: #4c4cf2;
+        filter: blur(50px);
+        opacity: 0.5;
+      }
+
+      .glow-shape2 {
+        width: 240px;
+        height: 100px;
+        bottom: -20px;
+        right: -20px;
+        background: #b24cf2;
+        filter: blur(50px);
+        opacity: 0.5;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrapper">
+      <div class="dots-bg"></div>
+
+      <div class="container">
+        <span class="text">Request Free Sample & Pricing</span>
+
+        <svg class="border-svg" viewBox="0 0 262 57" fill="none">
+          <rect
+            x="0.75"
+            y="0.75"
+            width="260.5"
+            height="55.5"
+            rx="27.75"
+            stroke="url(#paint0_linear)"
+            stroke-width="1.5"
+          />
+          <defs>
+            <linearGradient
+              id="paint0_linear"
+              x1="0"
+              y1="28.5"
+              x2="262"
+              y2="28.5"
+              gradientUnits="userSpaceOnUse"
+            >
+              <stop stop-color="#5557E9" />
+              <stop offset="1" stop-color="#B472E8" />
+            </linearGradient>
+          </defs>
+        </svg>
+      </div>
+
+      <div class="glow-shape1"></div>
+      <div class="glow-shape2"></div>
+    </div>
+  </body>
+</html>

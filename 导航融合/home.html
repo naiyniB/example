@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+      :root {
+        --page-bg: #f5f5f5; /* 外部背景 */
+        --card-blue: #0b57d0; /* 图片中的蓝色 */
+        --tab-size: 60px;
+      }
+
+      body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        background: var(--page-bg);
+        font-family: sans-serif;
+      }
+
+      /* 蓝色主卡片 */
+      .nav {
+        width: 400px;
+        height: 250px; /* 增加高度像个卡片 */
+        background: var(--card-blue);
+        border-radius: 30px;
+        position: relative;
+        display: flex;
+        justify-content: flex-end; /* Tab 靠右对齐，模仿图片 */
+        padding: 0 20px;
+      }
+
+      .nav-list {
+        display: flex;
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        height: 0; /* 列表本身不占高，让 Tab 悬浮 */
+      }
+
+      .nav li {
+        width: var(--tab-size);
+        height: var(--tab-size);
+        position: relative;
+        z-index: 2;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 5px;
+      }
+
+      /* 未激活状态的图标样式 */
+      .nav li i {
+        font-style: normal;
+        font-size: 20px;
+        background: #e8eefc; /* 浅灰蓝色背景 */
+        width: 45px;
+        height: 45px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        transition: 0.5s;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      }
+
+      /* 激活状态的图标：上移并变色 */
+      .nav li.active i {
+        transform: translateY(-25px);
+        background: linear-gradient(135deg, #609dfa, #2b70e4);
+        color: white;
+        box-shadow: 0 8px 15px rgba(43, 112, 228, 0.4);
+      }
+
+      /* 内凹指示器 */
+      .indicator {
+        position: absolute;
+        top: -25px; /* 向上偏移，一半在卡片外 */
+        width: var(--tab-size);
+        height: 50px;
+        background: var(--page-bg); /* 指示器颜色与外部背景一致 */
+        border-bottom-left-radius: 35px;
+        border-bottom-right-radius: 35px;
+        transition: 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        z-index: 1;
+      }
+
+      /* 左侧圆滑过渡 */
+      .indicator::before {
+        content: "";
+        position: absolute;
+        top: 25px;
+        left: -20px;
+        width: 20px;
+        height: 20px;
+        background: transparent;
+        border-top-right-radius: 20px;
+        /* 阴影颜色必须是卡片的蓝色 */
+        box-shadow: 8px -8px 0 0 var(--card-blue);
+      }
+
+      /* 右侧圆滑过渡 */
+      .indicator::after {
+        content: "";
+        position: absolute;
+        top: 25px;
+        right: -20px;
+        width: 20px;
+        height: 20px;
+        background: transparent;
+        border-top-left-radius: 20px;
+        box-shadow: -8px -8px 0 0 var(--card-blue);
+      }
+
+      /* 内容区域 */
+      .content {
+        position: absolute;
+        top: 60px;
+        left: 30px;
+        color: white;
+        pointer-events: none;
+      }
+
+      /* 逻辑定位 */
+      li:nth-child(1).active ~ .indicator {
+        transform: translateX(calc((var(--tab-size) + 10px) * 0));
+      }
+      li:nth-child(2).active ~ .indicator {
+        transform: translateX(calc((var(--tab-size) + 10px) * 1));
+      }
+      li:nth-child(3).active ~ .indicator {
+        transform: translateX(calc((var(--tab-size) + 10px) * 2));
+      }
+    </style>
+  </head>
+  <body>
+    <div class="nav">
+      <div class="content">
+        <h3 style="margin-bottom: 20px; opacity: 0.8">Established</h3>
+        <p style="width: 250px; font-size: 14px; line-height: 1.6">
+          A pioneer in eco-friendly flame retardants since 2007, delivering
+          innovation and stability.
+        </p>
+      </div>
+
+      <ul class="nav-list">
+        <li class="active"><i>🏢</i></li>
+        <li><i>☘️</i></li>
+        <li><i>👑</i></li>
+        <div class="indicator"></div>
+      </ul>
+    </div>
+
+    <script>
+      const list = document.querySelectorAll(".nav li");
+      function activeLink() {
+        list.forEach((item) => item.classList.remove("active"));
+        this.classList.add("active");
+      }
+      list.forEach((item) => item.addEventListener("click", activeLink));
+    </script>
+  </body>
+</html>

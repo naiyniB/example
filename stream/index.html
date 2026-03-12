@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <p></p>
+  </body>
+</html>
+<script>
+  const p = document.querySelector("p");
+
+  // 1. 原始水源：逐字发送
+  const sourceStream = new ReadableStream({
+    start(controller) {
+      this.string = "正在为您分析：lorem 是一种 lorem 内容...";
+    },
+    pull(controller) {
+      if (this.string.length === 0) {
+        controller.close();
+        return;
+      }
+      controller.enqueue(this.string[0]);
+      this.string = this.string.slice(1);
+    },
+  });
+
+  // 2. 转换流：负责“打码”
+  // 这里我们简单演示：将所有 'l' 变成 '⭐'
+  const filterStream = new TransformStream({
+    transform(char, controller) {
+      if (char.toLowerCase() === "l") {
+        controller.enqueue("*");
+      } else {
+        controller.enqueue(char);
+      }
+    },
+  });
+
+  (async () => {
+    // 3. 使用 pipeThrough 连接管道
+    const pipeline = sourceStream.pipeThrough(filterStream);
+
+    // 4. 消费最终流
+    for await (const char of pipeline) {
+      await new Promise((r) => setTimeout(r, 50)); // 模拟打字速度
+      p.innerText += char;
+    }
+
+    console.log("处理完毕");
+  })();
+</script>

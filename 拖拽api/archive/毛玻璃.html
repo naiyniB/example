@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Figma 毛玻璃效果实现</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      /* 自定义样式 */
+      .glass-effect {
+        background: rgba(255, 255, 255, 0.25);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+      }
+
+      .glass-dark {
+        background: rgba(0, 0, 0, 0.2);
+        backdrop-filter: blur(15px);
+        -webkit-backdrop-filter: blur(15px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      .glass-colored {
+        background: rgba(147, 112, 219, 0.2);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid rgba(147, 112, 219, 0.3);
+      }
+
+      /* 背景渐变 */
+      .gradient-bg {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      }
+
+      .gradient-bg-2 {
+        background: linear-gradient(45deg, #ff9a9e 0%, #fad0c4 100%);
+      }
+
+      .gradient-bg-3 {
+        background: linear-gradient(to right, #4facfe 0%, #00f2fe 100%);
+      }
+    </style>
+  </head>
+  <body class="min-h-screen gradient-bg flex items-center justify-center p-6">
+    <div class="max-w-6xl w-full">
+      <h1 class="text-4xl font-bold text-white text-center mb-12">
+        Figma 毛玻璃效果实现
+      </h1>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <!-- 浅色毛玻璃卡片 -->
+        <div class="glass-effect rounded-2xl p-6 text-gray-800">
+          <h2 class="text-xl font-semibold mb-4">浅色毛玻璃效果</h2>
+          <p class="mb-4">
+            这是标准的浅色毛玻璃效果，类似于 iOS 和 macOS 的设计风格。
+          </p>
+          <div class="text-sm space-y-2">
+            <p>
+              <span class="font-medium">背景:</span> rgba(255, 255, 255, 0.25)
+            </p>
+            <p><span class="font-medium">模糊:</span> 10px</p>
+            <p>
+              <span class="font-medium">边框:</span> 1px rgba(255, 255, 255,
+              0.18)
+            </p>
+          </div>
+        </div>
+
+        <!-- 深色毛玻璃卡片 -->
+        <div class="glass-dark rounded-2xl p-6 text-white">
+          <h2 class="text-xl font-semibold mb-4">深色毛玻璃效果</h2>
+          <p class="mb-4">
+            深色毛玻璃效果，适合在明亮背景上使用，提供更好的对比度。
+          </p>
+          <div class="text-sm space-y-2">
+            <p><span class="font-medium">背景:</span> rgba(0, 0, 0, 0.2)</p>
+            <p><span class="font-medium">模糊:</span> 15px</p>
+            <p>
+              <span class="font-medium">边框:</span> 1px rgba(255, 255, 255,
+              0.1)
+            </p>
+          </div>
+        </div>
+
+        <!-- 彩色毛玻璃卡片 -->
+        <div class="glass-colored rounded-2xl p-6 text-white">
+          <h2 class="text-xl font-semibold mb-4">彩色毛玻璃效果</h2>
+          <p class="mb-4">带有色调的毛玻璃效果，可以匹配品牌色彩或界面主题。</p>
+          <div class="text-sm space-y-2">
+            <p>
+              <span class="font-medium">背景:</span> rgba(147, 112, 219, 0.2)
+            </p>
+            <p><span class="font-medium">模糊:</span> 12px</p>
+            <p>
+              <span class="font-medium">边框:</span> 1px rgba(147, 112, 219,
+              0.3)
+            </p>
+          </div>
+        </div>
+
+        <!-- 使用 Tailwind 类实现的毛玻璃 -->
+        <div
+          class="bg-white/20 backdrop-blur-lg border border-white/30 rounded-2xl p-6 text-white"
+        >
+          <h2 class="text-xl font-semibold mb-4">Tailwind CSS 实现</h2>
+          <p class="mb-4">
+            使用 Tailwind 的 backdrop-blur 和透明度工具类实现。
+          </p>
+          <div class="text-sm space-y-2">
+            <p>
+              <span class="font-medium">类名:</span> bg-white/20
+              backdrop-blur-lg
+            </p>
+            <p><span class="font-medium">边框:</span> border border-white/30</p>
+            <p><span class="font-medium">圆角:</span> rounded-2xl</p>
+          </div>
+        </div>
+
+        <!-- 导航栏示例 -->
+        <div class="col-span-1 md:col-span-2 lg:col-span-3 mt-8">
+          <div class="glass-effect rounded-2xl p-6">
+            <h2 class="text-xl font-semibold mb-4 text-gray-800">导航栏示例</h2>
+            <div class="flex flex-wrap gap-4">
+              <a
+                href="#"
+                class="px-4 py-2 rounded-lg bg-white/30 hover:bg-white/40 transition"
+                >首页</a
+              >
+              <a
+                href="#"
+                class="px-4 py-2 rounded-lg bg-white/20 hover:bg-white/30 transition"
+                >产品</a
+              >
+              <a
+                href="#"
+                class="px-4 py-2 rounded-lg bg-white/20 hover:bg-white/30 transition"
+                >服务</a
+              >
+              <a
+                href="#"
+                class="px-4 py-2 rounded-lg bg-white/20 hover:bg-white/30 transition"
+                >关于我们</a
+              >
+              <a
+                href="#"
+                class="px-4 py-2 rounded-lg bg-white/20 hover:bg-white/30 transition"
+                >联系我们</a
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 实现说明 -->
+      <div class="mt-12 glass-dark rounded-2xl p-6 text-white">
+        <h2 class="text-2xl font-bold mb-4">如何实现毛玻璃效果</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <h3 class="text-lg font-semibold mb-2">CSS 属性</h3>
+            <ul class="list-disc pl-5 space-y-2">
+              <li><code>backdrop-filter: blur()</code> - 核心模糊效果</li>
+              <li><code>background: rgba()</code> - 半透明背景</li>
+              <li><code>border</code> - 细微边框增强效果</li>
+              <li><code>box-shadow</code> - 可选，增加深度</li>
+            </ul>
+          </div>
+          <div>
+            <h3 class="text-lg font-semibold mb-2">最佳实践</h3>
+            <ul class="list-disc pl-5 space-y-2">
+              <li>确保背后有内容才能看到效果</li>
+              <li>调整透明度平衡美观和可读性</li>
+              <li>在移动设备上测试性能</li>
+              <li>提供备用样式以防不支持</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
