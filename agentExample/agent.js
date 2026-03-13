@@ -2,7 +2,7 @@ import OpenAI from "openai";
 import "dotenv/config";
 import readline from "node:readline/promises";
 import { stdin as input, stdout as output } from "node:process";
-import { getWeather } from "./tools.js";
+import { expandProductKeywords, getWeather, searchRelatedWebsites, searchWebsites } from "./tools.js";
 
 const apiKey = process.env.DEEPSEEK_API_KEY || process.env.OPENAI_API_KEY;
 
@@ -17,9 +17,128 @@ const openai = new OpenAI({
   apiKey,
 });
 const model = "deepseek-chat";
+const systemPrompt = `你是一个会调用工具的商业分析助手。
+当任务需要查询、搜索、扩展关键词、获取外部信息时，优先调用已经提供的工具，而不是输出伪造的函数调用文本。
+只允许使用这些工具名：searchWebsites、searchRelatedWebsites、expandProductKeywords、getWeather。
+如果任务需要多步完成，请连续调用多个工具，直到拿到足够信息后再输出最终答案。
+不要输出类似 <function_calls>、<invoke>、DSML 之类的伪工具调用标记。`;
 const messages = [];
 
 const tools = {
+  searchWebsites: {
+    schema: {
+      type: "function",
+      function: {
+        name: "searchWebsites",
+        description: "Search company or official websites related to given keywords in a target region via serper.dev",
+        parameters: {
+          type: "object",
+          properties: {
+            keywords: {
+              type: "array",
+              items: {
+                type: "string",
+              },
+              description: "A list of search keywords, preferably industry terms, product terms, or company intent phrases",
+            },
+            region: {
+              type: "string",
+              description: "Target region or country, for example Maldives, China, United States, 马尔代夫",
+            },
+            site: {
+              type: "string",
+              description: "Optional domain restriction, for example linkedin.com or yellowpages.com.mv",
+            },
+            maxResults: {
+              type: "number",
+              description: "Maximum number of website results to return, up to 10",
+            },
+          },
+          required: ["keywords"],
+        },
+      },
+    },
+    execute: async ({ keywords, region, site, maxResults }) => {
+      return searchWebsites({ keywords, region, site, maxResults });
+    },
+  },
+  searchRelatedWebsites: {
+    schema: {
+      type: "function",
+      function: {
+        name: "searchRelatedWebsites",
+        description: "Search related websites from Google results via serper.dev using given keywords and optional target region",
+        parameters: {
+          type: "object",
+          properties: {
+            keywords: {
+              type: "array",
+              items: {
+                type: "string",
+              },
+              description: "A list of keywords used to search related websites",
+            },
+            region: {
+              type: "string",
+              description: "Optional target region or country, for example Maldives or 马尔代夫",
+            },
+            site: {
+              type: "string",
+              description: "Optional domain restriction, for example zhihu.com or 36kr.com",
+            },
+            maxResults: {
+              type: "number",
+              description: "Maximum number of website results to return, up to 10",
+            },
+            limit: {
+              type: "number",
+              description: "Legacy alias for maximum number of website results to return, up to 10",
+            },
+          },
+          required: ["keywords"],
+        },
+      },
+    },
+    execute: async ({ keywords, region, site, limit, maxResults }) => {
+      return searchRelatedWebsites({ keywords, region, site, limit, maxResults });
+    },
+  },
+  expandProductKeywords: {
+    schema: {
+      type: "function",
+      function: {
+        name: "expandProductKeywords",
+        description: "Expand product and industry keywords into related search terms grouped by category",
+        parameters: {
+          type: "object",
+          properties: {
+            products: {
+              type: "array",
+              items: {
+                type: "string",
+              },
+              description: "A list of product names, for example AI客服 or 智能外呼",
+            },
+            industryKeywords: {
+              type: "array",
+              items: {
+                type: "string",
+              },
+              description: "A list of industry words, for example 教育, 电商, 医疗",
+            },
+            maxResults: {
+              type: "number",
+              description: "Maximum number of keywords per category",
+            },
+          },
+          required: ["products"],
+        },
+      },
+    },
+    execute: async ({ products, industryKeywords, maxResults }) => {
+      return expandProductKeywords({ products, industryKeywords, maxResults });
+    },
+  },
   getWeather: {
     schema: {
       type: "function",
@@ -47,73 +166,55 @@ const tools = {
 
 async function runAgent(userInput) {
   let finished = false;
+  let finalContent = "";
+
+  if (!messages.length) {
+    messages.push({ role: "system", content: systemPrompt });
+  }
+
   messages.push({ role: "user", content: userInput });
 
   while (!finished) {
-    // 让 LLM 思考，并生成工具调用
     const response = await openai.chat.completions.create({
-      model: model, // 确保 model 已定义
+      model,
       messages,
-      tools: [tools.getWeather.schema], // 提供工具定义
-      tool_choice: "auto", // 自动调用工具
+      tools: Object.values(tools).map((tool) => tool.schema),
+      tool_choice: "auto",
     });
 
-    // 获取 LLM 返回的 tool_call
     const message = response.choices[0].message;
-    const toolCall = message.tool_calls?.[0];
-    if (!toolCall) {
+    const toolCalls = message.tool_calls || [];
+
+    if (!toolCalls.length) {
       messages.push(message);
+      finalContent = message.content || "";
       finished = true;
       continue;
     }
 
     messages.push(message);
-    if (toolCall) {
-      // 执行工具
+    for (const toolCall of toolCalls) {
       const name = toolCall.function.name;
       const args = JSON.parse(toolCall.function.arguments || "{}");
       let toolResult = null;
 
-      // 执行工具函数
       if (tools[name]) {
         toolResult = await tools[name].execute(args);
         console.log("工具执行结果:", toolResult);
+      } else {
+        toolResult = JSON.stringify({ error: `未知工具: ${name}` });
       }
 
-      // 记录工具结果
       messages.push({
         role: "tool",
         tool_call_id: toolCall.id,
-        content: toolResult,
+        content: typeof toolResult === "string" ? toolResult : JSON.stringify(toolResult),
       });
-
-      // 判断是否完成
-      if (toolResult.includes("天气")) {
-        finished = true; // 任务完成
-        messages.push({
-          role: "assistant",
-          content: `任务完成：${toolResult}`,
-        });
-      }
     }
   }
 
-  // 返回最终结果
-  const finalStream = await openai.chat.completions.create({
-    model: model, // 确保 model 已定义
-    messages,
-    stream: true,
-  });
-  let finalContent = "";
   console.log("最终回答:");
-  for await (const chunk of finalStream) {
-    const delta = chunk.choices?.[0]?.delta?.content || "";
-    if (!delta) continue;
-    finalContent += delta;
-    process.stdout.write(delta);
-  }
-  process.stdout.write("\n");
-  messages.push({ role: "assistant", content: finalContent });
+  process.stdout.write(`${finalContent}\n`);
 }
 
 async function main() {
